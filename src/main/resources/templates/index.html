@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="utf-8">
+    <title>단순 SSE</title>
+</head>
+<body>
+    <div id="stockValue">
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <script type="text/javascript">
+        var source = null;
+        function start() {
+            source = new EventSource("/stocks/1234");
+            console.log("create EventSource");
+            source.onmessage = function(ev) {
+                console.log("on message: ", ev.data);
+                $("#stockValue").text(ev.data);
+            };
+            source.onerror = function(err) {
+                console.log("on err: ", err);
+                stop();
+            };
+        }
+        function stop() {
+            if (source != null) {
+                source.close();
+                console.log("close EventSource");
+                source = null;
+            }
+        }
+
+        $(document).ready(function(){
+            start();
+        });
+        $(window).on("unload", function () {
+            stop();
+        });
+    </script>
+</body>
+
+</html>
