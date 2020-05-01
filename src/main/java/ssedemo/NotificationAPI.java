@@ -10,11 +10,6 @@ import java.time.LocalTime;
 
 @RestController
 public class NotificationAPI {
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
     @GetMapping("/stream-sse")
     public Flux<ServerSentEvent<String>> streamEvents() {
         return Flux.interval(Duration.ofSeconds(20))
